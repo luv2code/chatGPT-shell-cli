@@ -347,21 +347,25 @@ while $running; do
 		echo -e "$OVERWRITE_PROCESSING_LINE"
 		echo -e "${CHATGPT_CYAN_LABEL}Your image was created. \n\nLink: ${image_url}\n"
 
-		if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-			curl -sS $image_url -o temp_image.png
-			imgcat temp_image.png
-			rm temp_image.png
-		elif [[ "$TERM" == "xterm-kitty" ]]; then
-			curl -sS $image_url -o temp_image.png
-			kitty +kitten icat temp_image.png
-			rm temp_image.png
-		else
-			echo "Would you like to open it? (Yes/No)"
-			read -e answer
-			if [ "$answer" == "Yes" ] || [ "$answer" == "yes" ] || [ "$answer" == "y" ] || [ "$answer" == "Y" ] || [ "$answer" == "ok" ]; then
-				open "${image_url}"
-			fi
-		fi
+    if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+      curl -sS $image_url -o temp_image.png
+      imgcat temp_image.png
+      rm temp_image.png
+    elif [[ "$TERM_PROGRAM" == "WezTerm" ]]; then
+      curl -sS $image_url -o temp_image.png
+      wezterm imgcat temp_image.png
+      rm temp_image.png
+    elif [[ "$TERM" == "xterm-kitty" ]]; then
+      curl -sS $image_url -o temp_image.png
+      kitty +kitten icat temp_image.png
+      rm temp_image.png
+    else
+      echo "Would you like to open it? (Yes/No)"
+      read -e answer
+      if [ "$answer" == "Yes" ] || [ "$answer" == "yes" ] || [ "$answer" == "y" ] || [ "$answer" == "Y" ] || [ "$answer" == "ok" ]; then
+        open "${image_url}"
+      fi
+    fi
 	elif [[ "$prompt" == "history" ]]; then
 		echo -e "\n$(cat ~/.chatgpt_history)"
 	elif [[ "$prompt" == "models" ]]; then
